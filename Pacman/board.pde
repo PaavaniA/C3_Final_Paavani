@@ -43,7 +43,7 @@ class board
     rect(0, 0, 180, 110, 5);//ghost house
     stroke(0);
     fill(0);
-    rect(0, -50, 70, 50);
+
 
     //L black lines (short, long)
     noStroke();
