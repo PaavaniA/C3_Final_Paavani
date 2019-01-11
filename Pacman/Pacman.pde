@@ -1,3 +1,19 @@
+/*
+ME
+- Pacman and wall collision
+- Grid
+- Game screens: menu, game, gameover
+  Menu
+    - Pacman, ghosts, coins visual
+    - Text
+   Game
+    - Ghost movement
+    - Ghost and pacman collision
+    - Pacman open and close mouth, flips when change in direction
+  Gameover
+    - Text
+*/
+
 PImage logo;
 PImage green_ghost;
 PImage pink_ghost;
@@ -7,6 +23,9 @@ PImage pacman1;
 PImage pacman2;
 PImage pacman3;
 PImage pacman4;
+
+PFont mono;
+int gameScreen = 0;
 
 ghost ghosts[] = new ghost[4];
 player pacman = new player();
@@ -50,14 +69,59 @@ void setup()
 void draw()
 {
   background(0);
+
+  if (gameScreen == 0) {
+    menuScreen();
+  }
+  if (gameScreen == 1) {
+    gameScreen();
+  }
+  if (gameScreen == 2) {
+    gameOverScreen();
+  }
+}
+
+void menuScreen()
+{
+  float textsize = 20;
+
+  background(0);
+  textAlign(CENTER);
+  fill(255);
+  mono = loadFont("AppleBraille-15.vlw");
+  textFont(mono);
+  textSize(textsize);
+  text("S T A R T", width/2, height/2+10);
+
+  if (mouseX>width/2-100&&mouseX<width/2+100&&mouseY>height/2-1005&&mouseY<height/2+100)
+  {
+    textsize = 40;
+  }
+
+  image(pink_ghost, 55, height/2-17, 50, 50);
+  image(green_ghost, 130, height/2-15, 40, 40);
+  image(yellow_ghost, 200, height/2-15, 40, 40);
+  image(red_ghost, 270, height/2-20, 50, 50);
+  image(pacman1, 620, height/2-20, 50, 50);
+  ellipse(width-300, height/2+5, 20, 20);
+  ellipse(width-250, height/2+5, 20, 20);
+  ellipse(width-200, height/2+5, 20, 20);
+  ellipse(width-150, height/2+5, 20, 20);
+  ellipse(width-100, height/2+5, 20, 20);
+}
+
+void gameScreen()
+{
   image(logo, 370, 10, 260, 40); //actual dimensions (1024, 242)
 
+  pacman.Draw();
+  pacman.keyPressed();
   coins.Draw();
-  float dist = dist(pacman.posx, pacman.posy, coins.x, coins.y);
+  //float dist = dist(pacman.posx, pacman.posy, coins.x, coins.y);
 
-  if (dist < 10)
+  //if (dist < 10)
   {
-    coins.size = 0;
+    //coins.size = 0;
   }
   for (int i = 0; i < ghosts.length; i++) {
     ghosts[i].Draw();
@@ -68,19 +132,41 @@ void draw()
     if (d < 10)
     {
       background(255, 0, 0);
+      gameOverScreen();
+      
     }
   }
 
-  pacman.Draw();
-  pacman.keyPressed();
+  fill(0);
+  rect(width/2, height/2-55, 100, 25);
 
-
+  pushMatrix();
   translate(width/2, height/2);
   board.Draw();
+  popMatrix();
   //score.Draw();
+}
 
+void gameOverScreen()
+{
+  background(0);
+  textAlign(CENTER);
+  fill(255);
+  mono = loadFont("AppleBraille-15.vlw");
+  textFont(mono);
+  textSize(30);
+  text("G A M E  O V E R", width/2, height/2+10);
+}
 
-  //fill(0);
-  //rect(width/2, height/2-55, 100, 25);
-  //rect(width/2, height/2+55, 100, 25);
+void mousePressed()
+{
+  if (gameScreen == 0)
+  {
+    startGame();
+  }
+}
+
+void startGame()
+{
+  gameScreen = 1;
 }
